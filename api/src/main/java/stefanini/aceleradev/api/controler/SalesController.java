@@ -7,11 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-import stefanini.aceleradev.api.produto.DadosDetalhamentoProduto;
-import stefanini.aceleradev.api.produto.DadosProduto;
-import stefanini.aceleradev.api.produto.Produto;
 import stefanini.aceleradev.api.produto.ProdutoRepository;
-import stefanini.aceleradev.api.usuario.Usuario;
 import stefanini.aceleradev.api.usuario.UsuarioRepository;
 import stefanini.aceleradev.api.venda.DadosDetalhamentoVenda;
 import stefanini.aceleradev.api.venda.DadosVenda;
@@ -30,16 +26,15 @@ public class SalesController {
     private ProdutoRepository produtoRepository;
     @Autowired
     private VendaRepository vendaRepository;
-    /*@PostMapping
+    @PostMapping
     @Transactional
     public ResponseEntity cadastrar(@RequestBody @Valid DadosVenda dados, UriComponentsBuilder uriBuilder) {
         var venda = new Venda((dados));
         vendaRepository.save(venda);
 
         var uri = uriBuilder.path("/venda/{id}").buildAndExpand(venda.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(new DadosDetalhamentoVenda(venda));
-    }*/
+        return null;
+    }
     @GetMapping
     public List<Venda> getAllSales() {
         return vendaRepository.findAll();
@@ -53,27 +48,6 @@ public class SalesController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }
-
-    @PostMapping
-    @Transactional
-    public ResponseEntity<Venda> addSales(@RequestBody @Valid DadosVenda dados) {
-        // Busca o usuário no banco de dados pelo ID
-        Usuario usuario = usuarioRepository.findById(dados.user_id().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com o ID fornecido"));
-
-        // Busca o produto no banco de dados pelo ID
-        Produto produto = produtoRepository.findById(dados.produto_id().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado com o ID fornecido"));
-
-        // Cria um objeto Sales com o usuário, produto e quantidade fornecidos
-        Venda sales = new Venda();
-        sales.setUser(usuario);
-        sales.setProduto(produto);
-
-        // Salva a venda no banco de dados
-        Venda newSales = vendaRepository.save(sales);
-        return new ResponseEntity<>(newSales, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

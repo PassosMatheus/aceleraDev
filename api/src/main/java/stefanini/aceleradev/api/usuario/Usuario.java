@@ -18,6 +18,7 @@ public class Usuario {
     private Long id;
     private String nome;
     private String dataNascimento;
+    @Column(unique = true)
     private String cpf;
     private String cep;
 

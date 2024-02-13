@@ -19,11 +19,11 @@ public class Venda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Usuario user_id;
+    @JoinColumn(name = "user_name")
+    private Usuario usuario;
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Produto produto_id;
+    @JoinColumn(name = "product_name")
+    private Produto produto;
     private Long quantidade;
     private String data_venda;
 
@@ -46,11 +46,11 @@ public class Venda {
     }
 
     public void setUser(Usuario usuario) {
-        this.user_id = user_id;
+        this.usuario = usuario;
     }
 
     public void setProduto(Produto produto) {
-        this.produto_id = produto_id;
+        this.produto = produto;
     }
 }
 
