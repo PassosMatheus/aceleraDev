@@ -11,7 +11,6 @@ public class SaleRequest {
             this.produto_nome = produto_nome;
             this.quantidade = quantidade;
         }
-
         public String getUserName() {
             return usuario_nome;
         }

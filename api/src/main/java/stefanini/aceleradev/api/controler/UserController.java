@@ -16,12 +16,16 @@ import java.util.Optional;
 @RequestMapping("/usuario")
 public class UserController {
     @Autowired
-    private UsuarioRepository repository;
+    private UsuarioRepository usuarioRepository;
     @PostMapping
     @Transactional
     public ResponseEntity cadastrar(@RequestBody @Valid DadosUsuario dados, UriComponentsBuilder uriBuilder) {
         var usuario = new Usuario((dados));
-        repository.save(usuario);
+
+        if (usuarioRepository.existsByCpf(usuario.getCpf())) {
+            throw new IllegalStateException("Já existe um usuário com o mesmo CPF.");
+        }
+        usuarioRepository.save(usuario);
 
         var uri = uriBuilder.path("/usuario/{id}").buildAndExpand(usuario.getId()).toUri();
 
@@ -30,13 +34,13 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<DadosListagemUsuario>> listar() {
-        var users = repository.findAll().stream().map(DadosListagemUsuario::new).toList();
+        var users = usuarioRepository.findAll().stream().map(DadosListagemUsuario::new).toList();
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DadosListagemUsuario> listarPorId(@PathVariable Long id) {
-        Optional<Usuario> optionalUsuario = repository.findById(id);
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
         if (optionalUsuario.isPresent()) {
             Usuario usuario = optionalUsuario.get();
             return ResponseEntity.ok(new DadosListagemUsuario(usuario));
@@ -48,7 +52,7 @@ public class UserController {
     @PutMapping
     @Transactional
     public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizarUsuario dados) {
-        var usuario = repository.getReferenceById(dados.id());
+        var usuario = usuarioRepository.getReferenceById(dados.id());
         usuario.atualizarDados(dados);
 
         return ResponseEntity.ok(new DadosDetalhamentoUsuario(usuario));
@@ -57,7 +61,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity excluir(@PathVariable Long id) {
-        repository.deleteById(id);
+        usuarioRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,13 +1,14 @@
 package stefanini.aceleradev.api.usuario;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDate;
 
 public record DadosAtualizarUsuario(
         @NotNull
         Long id,
         String nome,
-        String dataNascimento,
+        LocalDate dataNascimento,
         String cpf,
         String cep) {
 }

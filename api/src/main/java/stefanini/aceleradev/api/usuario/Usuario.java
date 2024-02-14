@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Table(name="usuarios")
 @Entity(name="usuarios")
 @Getter
@@ -17,7 +19,8 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
-    private String dataNascimento;
+    @Column(name="dataNascimento")
+    private LocalDate dataNascimento;
     @Column(unique = true)
     private String cpf;
     private String cep;
