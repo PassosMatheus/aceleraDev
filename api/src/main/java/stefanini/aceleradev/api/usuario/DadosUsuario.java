@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 public record DadosUsuario(
+        Long id,
         @NotBlank
         String nome,
         @NotNull
@@ -14,6 +15,8 @@ public record DadosUsuario(
         @NotBlank
         String cpf,
         @NotBlank
-        String cep)
-{
+        String cep){
+
 }
+
+

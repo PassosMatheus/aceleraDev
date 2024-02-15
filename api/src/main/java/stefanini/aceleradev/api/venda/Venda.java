@@ -1,56 +1,37 @@
 package stefanini.aceleradev.api.venda;
 
 import jakarta.persistence.*;
-import lombok.*;
-import stefanini.aceleradev.api.produto.DadosAtualizarProduto;
+import lombok.Getter;
+import lombok.Setter;
 import stefanini.aceleradev.api.produto.Produto;
+import stefanini.aceleradev.api.usuario.DadosUsuario;
 import stefanini.aceleradev.api.usuario.Usuario;
 
-import java.util.Timer;
+import java.time.LocalDate;
 
-@Table(name="vendas")
-@Entity(name="vendas")
+@Table(name = "vendas")
+@Entity
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(of = "id")
+@Setter
 public class Venda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Integer quantidade;
+    private LocalDate data_venda;
+
     @ManyToOne
-    @JoinColumn(name = "user_name")
+    @JoinColumn(name = "user_id")
     private Usuario usuario;
+
     @ManyToOne
-    @JoinColumn(name = "product_name")
+    @JoinColumn(name = "produto_id")
     private Produto produto;
-    private Long quantidade;
-    private String data_venda;
 
     public Venda(DadosVenda dados) {
-        this.id = dados.id();
-        this.quantidade = dados.quantidade();
+        this.usuario = new Usuario(dados.usuario());
+        this.produto = new Produto(dados.produto());
         this.data_venda = dados.data_venda();
-    }
-
-    public void atualizarDados(DadosAtualizarVenda dados) {
-        if (dados.id() != null) {
-            this.id = dados.id();
-        }
-        if (dados.quantidade() != null) {
-            this.quantidade = dados.quantidade();
-        }
-        if (dados.data_venda() != null) {
-            this.data_venda = dados.data_venda();
-        }
-    }
-
-    public void setUser(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public void setProduto(Produto produto) {
-        this.produto = produto;
+        this.quantidade = dados.quantidade();
     }
 }
-
